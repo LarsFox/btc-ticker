@@ -31,7 +31,7 @@ func minuteStart(t time.Time) int64 {
 	).Unix()
 }
 
-// retrieve takes a value from Storage and deletes it,
+// Retrieve takes a value from Storage and deletes it,
 // while also setting the threshold to this value.
 //
 // All the values below the threshold are therefore ignored.

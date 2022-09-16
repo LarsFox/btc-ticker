@@ -48,7 +48,8 @@ func main() {
 		s.Subscribe(ticker)
 	}
 
-	go s.ProduceFairPrice()
+	go s.Listen()
 
-	s.Listen()
+	s.DelayMinute()
+	s.ProduceFairPrice()
 }

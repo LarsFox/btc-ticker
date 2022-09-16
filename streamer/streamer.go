@@ -68,13 +68,29 @@ func (s *Streamer) Listen() {
 	}
 }
 
-// ProduceFairPrice prints calculated price once in a minute.
+// DelayMinute is a helper function to start at the exact minute start.
+func (s *Streamer) DelayMinute() {
+	for {
+		now := time.Now()
+		if now.Second() == 0 {
+			return
+		}
+
+		time.Sleep(time.Second)
+	}
+}
+
+// ProduceFairPrice prints calculated price for the previous period.
+// First print is skipped due to the time.Tick initial delay.
+// This skip also proves useful as there is not enough data for the first print.
 func (s *Streamer) ProduceFairPrice() {
 	for t := range time.Tick(s.period) {
-		prices := s.storage.Retrieve(t)
+		minute := t.Add(-time.Minute)
+
+		prices := s.storage.Retrieve(minute)
 
 		val := s.calc(prices)
 
-		log.Println(t.Unix(), val)
+		log.Println(minute.Unix(), val)
 	}
 }
